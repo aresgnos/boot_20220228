@@ -31,7 +31,7 @@ public class SequenceService {
         // 옵션 반환과 1증가를 동시에 수행
         FindAndModifyOptions options = new FindAndModifyOptions();
         options.returnNew(true);
-        options.upsert(true);
+        options.upsert(true); // upsert = 없으면 insert, 있으면 update
 
         Sequence counter = mongoDB.findAndModify(query, update, options, Sequence.class);
 

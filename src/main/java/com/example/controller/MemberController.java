@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping(value = "/member")
+@RequestMapping(value = { "/member" })
 public class MemberController {
 
     // 설계 도면 가져오기
@@ -24,6 +24,39 @@ public class MemberController {
     @Autowired
     private MemberDB memberDB;
 
+    // 수정
+    // 127.0.0.1:8080/member/update?id=aaaa
+    @GetMapping(value = "/update")
+    public String updateGET(
+            Model model,
+            @RequestParam(name = "id") String id) {
+
+        // DB에서 내용을 가져오기
+        Member member = memberDB.selectOneMember(id);
+
+        // jsp로 전달해줌
+        model.addAttribute("member", member);
+
+        return "/member/update"; // 표시할 jsp 파일명 확장자는 뺌
+    }
+
+    @PostMapping(value = "/update")
+    public String updatePOST(@ModelAttribute Member member) {
+        System.out.println(member.toString());
+
+        int ret = memberDB.updateMember(member);
+
+        if (ret == 1) {
+
+            // post에서는 jsp를 표시X, redirect를 이용해 주소를 변경해야함.
+            return "redirect:/member/selectlist";
+        }
+
+        // 127.0.0.1:8080/member/update?id=aaaa
+        return "redirect:/member/update?id=" + member.getId();
+    }
+
+    // 삭제
     // 127.0.0.1:8080/member/delete?id=aaaa
     // <form action="" method="get or post">
     // <input type="text" name="id" value="1" />
@@ -40,6 +73,7 @@ public class MemberController {
         return "redirect:/member/selectlist";
     }
 
+    // 회원 목록
     // 127.0.0.1:8080/member/selectlist
     @GetMapping(value = { "/selectlist" })
     public String selectlistGET(Model model) { // 변수명 마음대로
@@ -53,6 +87,7 @@ public class MemberController {
         return "member/select";
     }
 
+    // 회원가입
     // 127.0.0.1:8080/member/insert
     @GetMapping(value = { "/insert" })
     public String insertGET() {

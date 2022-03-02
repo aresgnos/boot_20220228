@@ -2,12 +2,12 @@ package com.example.service;
 
 import java.util.List;
 
-import com.example.entity.Item;
 import com.example.entity.Member;
 
 import org.springframework.stereotype.Service;
 
-// DB와 연동하는 부분 구현하는 설계부분 (설계도면)
+// DB와 연동하는 부분 구현하는 설계부분
+// 설계도면
 @Service
 public interface MemberDB {
 
@@ -20,7 +20,12 @@ public interface MemberDB {
     // 회원 1명 삭제 (회원 아이디가 오면 삭제 후 -1, 0 또는 1로)
     public int deleteMember(String id);
 
-    public static void inserItem(Item item) {
-    }
+    // 회원 1명 조회하기 (아이디를 전다하면 회원 1명의 정보가 옴)
+    public Member selectOneMember(String id);
+
+    // 회원 정보 변경하기
+    public int updateMember(Member member);
+
+    // 삭제, 추가, 수정의 return은 int
 
 }

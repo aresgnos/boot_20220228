@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 
-@Document(collection = "item3")
+@Document(collection = "item4")
 public class Item {
 
     @Id
@@ -34,5 +34,11 @@ public class Item {
     // import java.util
     @Field(name = "regdate")
     private Date regdate = null;
+
+    // byte 배열
+    private byte[] filedata = null;
+    private String filetype = null;
+    private String filename = null;
+    private long filesize = 0L;
 
 }
