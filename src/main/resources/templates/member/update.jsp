@@ -13,13 +13,13 @@
     <div style="padding:20px;">
         <h3>정보수정</h3>
         <hr />
-        <!-- entity에 있는 변수로 th:value 구성 -->
+
         <form th:action="@{/member/update}" method="post">
             아이디 <input type="text" th:value="${member.id}" name="id" readonly /><br />
             이름 <input type="text" th:value="${member.name}" name="name" /><br />
             나이 <input type="text" th:value="${member.age}" name="age" /><br />
             <input type="submit" value="수정" />
-        </form>
+        </form> 
     </div>
 </body>
 </html>

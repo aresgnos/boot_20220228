@@ -35,7 +35,8 @@ public class Item {
     @Field(name = "regdate")
     private Date regdate = null;
 
-    // byte 배열
+    // byte 배열 이미지는 네개로 쪼개서 들어가야 되기 때문에
+    // 수동으로 넣어줘야해서 name 값을 다르게 해줘야함
     private byte[] filedata = null;
     private String filetype = null;
     private String filename = null;

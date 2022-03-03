@@ -2,6 +2,8 @@ package com.example.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import com.example.entity.Member;
 import com.example.service.MemberDB;
 
@@ -23,6 +25,62 @@ public class MemberController {
     // = 클래스명 obj = new 클래스명();
     @Autowired
     private MemberDB memberDB;
+
+    // 마이페이지
+    @GetMapping(value = "/mypage")
+    public String mypageGET(
+            HttpSession httpSession,
+            Model model,
+            @RequestParam(name = "menu,id", defaultValue = "0") String id, int menu) {
+
+        if (menu == 0) {
+            return "redirect:/member/mypage?menu=1";
+        }
+        // 세션에서 정보를 읽음
+        String userid = (String) httpSession.getAttribute("USERID");
+
+        Member member = memberDB.selectOneMember(id);
+        model.addAttribute("member", member);
+
+        // 세션에 정보가 없다면 )로그인 되지 않은 상태에서 mypage 접근)
+        if (userid == null) {
+            return "redirect:/member/login"; // 로그인 페이지로 이동
+        }
+        return "member/mypage"; // 정보변경, 암호변경, 탈퇴하기
+    }
+
+    // 로그인
+    // 127.0.0.1:8080/member/login
+    @GetMapping(value = "/login")
+    public String longinGET() {
+        return "member/login";
+    }
+
+    @PostMapping(value = "/login")
+    public String loginPOST(@ModelAttribute Member member,
+            HttpSession httpSession) {
+        // DB에 아이디, 암호를 전달하여 일치하는 항목이 있는지 확인
+        Member retMember = memberDB.selectLogin(member);
+        System.out.println(retMember);
+        if (retMember != null) {
+            // 여기가 로그인이 되는 시점!!
+            // 세션 : 서버에 기록되는 정보(모든 주소, 컨트롤러에서 공유 가능)
+            // 비밀번호는 기록하면 안된다.
+            httpSession.setAttribute("USERID", retMember.getId());
+            httpSession.setAttribute("USERNAME", retMember.getName());
+            return "redirect:/home";
+
+        }
+        return "redirect:/member/login";
+    }
+
+    // 로그아웃
+    @GetMapping(value = "/logout")
+    public String longinGETH(HttpSession httpSession) {
+        // 세션을 완전히 삭제함. 로그인 기록을 삭제.
+        httpSession.invalidate();
+        return "redirect:/home";
+    }
 
     // 수정
     // 127.0.0.1:8080/member/update?id=aaaa

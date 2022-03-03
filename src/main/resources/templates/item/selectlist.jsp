@@ -10,12 +10,12 @@
 </head>
 
 <body>
-    <div style="padding:80px;">
+    <div style="padding:70px;">
         <h4>물품목록</h4>
-        <hr />
-
+        <a th:href="@{item/insert}" class="btn btn-primary" style="position:absolute;left:90%;top:70px;">등록</a>
+        <br />
         <table class="table table-borderless">
-            <tr>
+            <tr class="table-primary">
                 <th>번호</th>
                 <th>물품코드</th>
                 <th>물품명</th>
@@ -37,13 +37,13 @@
                     <img th:src="@{/item/image(code=${tmp.code})}" style="width:50px;height:50px;" />
                 </td>
                 <td>
-                    <a th:href="@{/item/update(id=${tmp.code})}">수정</a>
-                    <a th:href="@{/item/delete(id=${tmp.code})}">삭제</a>
+                    <a th:href="@{/item/update(code=${tmp.code})}">수정</a>
+                    <a th:href="@{/item/delete(code=${tmp.code})}">삭제</a>
 
-                    <form th:action="@{/item/delete}" method="get">
+                    <!-- <form th:action="@{/item/delete}" method="get">
                     <input type="hidden" name="code" th:value="${tmp.code}" />
                     <input type="submit" value="삭제1" />
-                    </form>
+                    </form> -->
                 </td>
             </tr>
         </table>

@@ -103,4 +103,20 @@ public class MemberDBImpl implements MemberDB {
 
     }
 
+    // 로그인
+    @Override
+    public Member selectLogin(Member member) {
+        try {
+            // 조건 두개 추가 AND
+            Query query = new Query();
+            query.addCriteria(Criteria.where("_id").is(member.getId()));
+            query.addCriteria(Criteria.where("pw").is(member.getPw()));
+
+            return mongodb.findOne(query, Member.class);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // 개발자를 위한 오류 출력(debug용)
+            return null;
+        }
+    }
 }

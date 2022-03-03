@@ -26,6 +26,8 @@ public class Member {
 
     private String pw1 = null;
 
+    private String pw2 = null;
+
     private String name = null;
 
     private int age = 0;
