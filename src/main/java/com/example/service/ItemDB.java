@@ -14,7 +14,7 @@ public interface ItemDB {
     public int inserItem(Item item);
 
     // 물품목록 (페이지 정보 1,2,3)
-    public List<Item> selectListItem(Pageable page);
+    public List<Item> selectListItem(Pageable pageable);
 
     // 이미지 정보 1개 조회
     public Item selectOneImage(long code);

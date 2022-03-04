@@ -13,6 +13,13 @@
     <div style="padding:70px;">
         <h4>물품목록</h4>
         <a th:href="@{item/insert}" class="btn btn-primary" style="position:absolute;left:90%;top:70px;">등록</a>
+
+        <form th:action="@{/member/select}" method="get">
+          <input type="hidden" name="page" value="1" />
+          <input type="text" name="text" placeholder="검색어" />
+          <input type="submit" value="검색" />
+      </form>
+      
         <br />
         <table class="table table-borderless">
             <tr class="table-primary">

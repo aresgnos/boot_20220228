@@ -17,8 +17,11 @@ public interface MemberDB {
     // 회원 전체목록(page, search X)
     public List<Member> selectListMember();
 
-    // 회원 1명 삭제 (회원 아이디가 오면 삭제 후 -1, 0 또는 1로)
+    // 회원 1명 삭제, 탈퇴 (회원 아이디가 오면 삭제 후 -1, 0 또는 1로)
     public int deleteMember(String id);
+
+    // 비밀번호로 회원탈퇴
+    public int removeMember(String pw);
 
     // 회원 1명 조회하기 (아이디를 전달하면 회원 1명의 정보가 옴)
     public Member selectOneMember(String id);
@@ -28,6 +31,9 @@ public interface MemberDB {
 
     // 로그인 (아이디, 암호가 전달되면 일치하는 회원정보를 반환)
     public Member selectLogin(Member member);
+
+    // 암호 변경
+    public long updatMemberPassword(Member member);
 
     // 삭제, 추가, 수정의 return은 int
 

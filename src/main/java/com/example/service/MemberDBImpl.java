@@ -119,4 +119,42 @@ public class MemberDBImpl implements MemberDB {
             return null;
         }
     }
+
+    // 암호 변경
+    @Override
+    public long updatMemberPassword(Member member) {
+        try {
+            Query query = new Query();
+            // 조건 = 아이디와 암호가 일치하는 것
+            query.addCriteria(Criteria.where("_id").is(member.getId()));
+            query.addCriteria(Criteria.where("pw").is(member.getPw()));
+
+            Update update = new Update();
+            update.set("pw", member.getNewPw());
+
+            UpdateResult result = mongodb.updateFirst(query, update, Member.class);
+
+            return result.getModifiedCount();
+        } catch (Exception e) {
+            e.printStackTrace(); // 개발자를 위한 오류 출력(debug용)
+            return -1L;
+        }
+    }
+
+    // 회원 탈퇴
+    @Override
+    public int removeMember(String pw) {
+        try {
+            Member member = new Member();
+            member.setPw(pw);
+
+            DeleteResult result = mongodb.remove(member);
+            if (result.getDeletedCount() == 1L) {
+                return 1;
+            }
+            return 0;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
 }

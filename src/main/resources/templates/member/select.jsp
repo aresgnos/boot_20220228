@@ -10,10 +10,16 @@
 </head>
 
 <body>
-    <div style="padding:20px;">
-        <h3>회원목록</h3>
+    <div style="padding:70px;">
+        <h4>회원목록</h4>
 
-        <table class="table table-striped table-hover">
+        <form th:action="@{/member/select}" method="get">
+            <input type="hidden" name="page" value="1" />
+            <input type="text" name="text" placeholder="검색어" />
+            <input type="submit" value="검색" />
+        </form>
+
+        <table class="table table-borderless">
             <tr>
                 <th>아이디</th>
                 <th>이름</th>
@@ -36,7 +42,7 @@
                 </td>
             </tr>
         </table>
-        <hr />
+        
     </div>
 </body>
 </html>

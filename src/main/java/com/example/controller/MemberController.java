@@ -26,27 +26,83 @@ public class MemberController {
     @Autowired
     private MemberDB memberDB;
 
+    @Autowired
+    private HttpSession httpSession;
+
     // 마이페이지
     @GetMapping(value = "/mypage")
     public String mypageGET(
-            HttpSession httpSession,
             Model model,
-            @RequestParam(name = "menu,id", defaultValue = "0") String id, int menu) {
+            @RequestParam(name = "menu", defaultValue = "0") int menu) { // model 변수가 있어야 세션쪽에서 쓸 수 있다.
 
         if (menu == 0) {
             return "redirect:/member/mypage?menu=1";
         }
         // 세션에서 정보를 읽음
         String userid = (String) httpSession.getAttribute("USERID");
-
-        Member member = memberDB.selectOneMember(id);
-        model.addAttribute("member", member);
+        System.out.println(userid);
 
         // 세션에 정보가 없다면 )로그인 되지 않은 상태에서 mypage 접근)
         if (userid == null) {
             return "redirect:/member/login"; // 로그인 페이지로 이동
         }
+
+        if (menu == 1) { // 세션에서 받았던 아이디 정보를 받음 = userid
+            // 정보수정
+            Member member = memberDB.selectOneMember(userid);
+            model.addAttribute("title", "정보수정");
+            model.addAttribute("mem", member);
+
+        } else if (menu == 2) { // 암호 변경
+            model.addAttribute("title", "암호변경");
+
+        } else if (menu == 3) { // 회원 탈퇴
+            model.addAttribute("title", "회원탈퇴");
+
+        }
         return "member/mypage"; // 정보변경, 암호변경, 탈퇴하기
+    }
+
+    // 127.0.0.1:8080/member/mypage?menu=1
+    // get과 post를 혼용해서 데이터를 받음
+    // 정보수정
+    @PostMapping(value = "/mypage")
+    public String mypagePOST(
+            @RequestParam(name = "menu") int menu,
+            @ModelAttribute Member member) {
+
+        if (menu == 1) { // jsp에서 정보수정 버튼 누를 때
+            int ret = memberDB.updateMember(member);
+            if (ret == 1) {
+                httpSession.setAttribute("USERNAME", member.getName());
+                return "redirect:/member/mypage?menu=1";
+            }
+            return "redirect:/member/mypage?menu=1";
+        } else if (menu == 2) { // jsp에서 암호변경 버튼 누를 때
+            // 아이디는 세션에서 꺼내서 수동으로 추가하기
+            System.out.println(member.toString()); // pw newPw
+            String userid = (String) httpSession.getAttribute("USERID");
+            member.setId(userid);
+
+            long ret = memberDB.updatMemberPassword(member);
+            if (ret == 1L) {
+                return "redirect:/member/mypage?menu=2";
+            }
+            return "redirect:/member/mypage?menu=2";
+
+        } else if (menu == 3) { // jsp에서 회원탈퇴 버튼 누를 때
+            // 암호를 주고 탈퇴하는 것도 해보아라
+            String userid = (String) httpSession.getAttribute("USERID");
+            int ret = memberDB.deleteMember(userid);
+            if (ret == 1) {
+                return "redirect:/member/mypage?menu=3";
+            }
+            return "redirect:/member/mypage?menu=3";
+
+        }
+        // 비정상적 작업 영역 (오류가 나기 때문에 리턴해줘야함)
+        return "redirect:/home";
+
     }
 
     // 로그인
@@ -57,8 +113,7 @@ public class MemberController {
     }
 
     @PostMapping(value = "/login")
-    public String loginPOST(@ModelAttribute Member member,
-            HttpSession httpSession) {
+    public String loginPOST(@ModelAttribute Member member) {
         // DB에 아이디, 암호를 전달하여 일치하는 항목이 있는지 확인
         Member retMember = memberDB.selectLogin(member);
         System.out.println(retMember);
@@ -76,7 +131,7 @@ public class MemberController {
 
     // 로그아웃
     @GetMapping(value = "/logout")
-    public String longinGETH(HttpSession httpSession) {
+    public String longoutGET() {
         // 세션을 완전히 삭제함. 로그인 기록을 삭제.
         httpSession.invalidate();
         return "redirect:/home";
