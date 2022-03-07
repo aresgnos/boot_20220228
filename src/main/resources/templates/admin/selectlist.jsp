@@ -12,7 +12,7 @@
 <body>
     <div style="padding:70px;">
         <h4>도서목록</h4>
-        <a th:href="@{/admin/insertbatch}" class="btn btn-primary" style="position:absolute;left:90%;top:100px;">등록</a>
+        <a th:href="@{/admin/insertbatch}" class="btn btn-primary" style="position:absolute;left:90%;top:100px;">일괄등록</a>
 
         <!-- a태그로 만들면 입력한 값이 들어가지 않는다. 검색어로 주소가 형성되어야 하므로 -->
         <form th:action="@{/admin/selectlist}" method="get">
@@ -23,8 +23,8 @@
         <br />
 
         <form th:action="@{/admin/action}" method="post">
-            <a class="btn btn-primary" name="btn" style="position:absolute;left:84%;top:100px;">일괄삭제</a>
-            <a class="btn btn-primary" name="btn" style="position:absolute;left:78%;top:100px;">일괄수정</a>
+          <input type="submit" name="btn" value="일괄삭제" />
+          <input type="submit" name="btn" value="일괄수정" />
             
             <table class="table table-borderless">
                 <tr class="table-primary">

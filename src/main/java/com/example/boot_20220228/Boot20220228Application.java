@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 // import org.springframework.session.data.mongo.JacksonMongoSessionConverter;
 import org.springframework.session.data.mongo.JdkMongoSessionConverter;
 import org.springframework.session.data.mongo.config.annotation.web.http.EnableMongoHttpSession;
@@ -15,8 +16,11 @@ import org.springframework.session.data.mongo.config.annotation.web.http.EnableM
 // 임의로 만들든 컨트롤러의 위치를 지정, 서비스의 위치
 @ComponentScan(basePackages = { "com.example.controller", "com.example.service" })
 
+// 임의로 만든 저장소 위치
+@EnableMongoRepositories(basePackages = { "com.example.repository" })
+
 // 세션 => 현재 로그인하고 있는 사람의 기록
-@EnableMongoHttpSession(collectionName = "session", maxInactiveIntervalInSeconds = 1800)
+@EnableMongoHttpSession(collectionName = "sessions", maxInactiveIntervalInSeconds = 1800)
 
 public class Boot20220228Application {
 
@@ -33,6 +37,7 @@ public class Boot20220228Application {
 	// return new JacksonMongoSessionConverter();
 	// }
 
+	// attr의 값이 byte[]로 보여짐, 객체, 배열.. 가능
 	@Bean
 	public JdkMongoSessionConverter mongoSessionConverter() {
 		return new JdkMongoSessionConverter(Duration.ofMinutes(30));

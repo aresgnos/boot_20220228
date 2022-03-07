@@ -5,9 +5,8 @@ import java.util.List;
 
 import com.example.entity.Book;
 import com.mongodb.client.result.DeleteResult;
-import com.mongodb.internal.bulk.DeleteRequest;
+import com.mongodb.client.result.UpdateResult;
 
-import org.eclipse.jdt.internal.compiler.parser.NLSTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 // 1. 서비스
@@ -93,20 +93,68 @@ public class BookDBImpl implements BookDB { // 2. 설계 인터페이스 구현
         }
     }
 
+    // 일괄 삭제
     @Override
-    public int deleteBatchBook(String btn, long[] code) {
+    public long deleteBatchBook(List<Long> code) {
         try {
 
+            // long[] => List<long>
+            // code => 코드가 배열로 온다 => [2,5,3] => collection<Long>
+            // .is는 하나만 삭제, .in은 n개 삭제 가능함
             Query query = new Query();
-            Criteria criteria = Criteria.where("btn").is(code);
-            query.addCriteria(criteria);
+            query.addCriteria(Criteria.where("_id").in(code));
 
             DeleteResult result = mongoDB.remove(query, Book.class);
-            if (result.getDeletedCount() > 0L) {
+            if (result.getDeletedCount() == (long) code.size()) {
                 return 1;
             }
             return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 
+    @Override
+    public List<Book> selectListWhereIn(List<Long> code) {
+        try {
+            Query query = new Query();
+            query.addCriteria(Criteria.where("_id").in(code));
+
+            // DESC=내림차순, ASC=오름차순
+            Sort sort = Sort.by(Direction.DESC, "_id");
+            query.with(sort);
+
+            return mongoDB.find(query, Book.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // 일괄 수정
+    @Override
+    public long updatebatchBook(List<Book> list) {
+        try {
+            long updateCount = 0;
+            for (Book tmp : list) {
+                Query query = new Query();
+                query.addCriteria(Criteria.where("_id").in(tmp.getCode()));
+
+                Update update = new Update();
+                update.set("title", tmp.getTitle());
+                update.set("price", tmp.getPrice());
+                update.set("writer", tmp.getWriter());
+                update.set("category", tmp.getCategory());
+
+                UpdateResult result = mongoDB.updateFirst(query, update, Book.class);
+                updateCount += result.getMatchedCount();
+            }
+            if (updateCount == list.size()) {
+                return 1;
+            }
+
+            return 0;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
