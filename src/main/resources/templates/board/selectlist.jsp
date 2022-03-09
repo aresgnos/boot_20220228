@@ -13,9 +13,11 @@
     <div style="padding:70px;">
         <h4>게시판목록</h4>
         <a th:href="@{/board/insert}" class="btn btn-primary" style="position:absolute;left:90%;top:70px;">글쓰기</a>
-
-        <input type="submit" name="btn" value="1개 삭제" />
-        <input type="submit" name="btn" value="1개 수정" />
+        
+        <form th:action="@{/board/action}" method="post">
+        <input type="submit" name="btn" class="btn btn-primary" value="1개 삭제" />
+        <input type="submit" name="btn" class="btn btn-primary" value="1개 수정" />
+        
         <table class="table table-borderless">
             <tr class="table-primary">
                 <th>radio</th>
@@ -29,18 +31,17 @@
 
             <tr th:each="tmp, idx : ${list}" >
                 <td><input type="radio" name="rad" th:value="${tmp.no}"></td>
-                <td th:text="${idx.count}"></td>
                 <td th:text="${tmp.no}"></td>
                 <td th:text="${tmp.title}"></td>
                 <td th:text="${tmp.content}"></td>
                 <td th:text="${tmp.writer}"></td>
+                <td th:text="${tmp.hit}"></td>
                 <td th:text="${tmp.regdate}"></td>
-                
-                    <!-- <a th:href="@{/board/update(code=${tmp.code})}">수정</a>
-                    <a th:href="@{/board/delete(code=${tmp.code})}">삭제</a> -->            
-                </td>
             </tr>
         </table>
+      </form>
+
+
         <!-- <div style="justify-content: center; display: flex; margin-top: 30px;">
         <nav aria-label="Page navigation example" >
             <ul class="pagination" >

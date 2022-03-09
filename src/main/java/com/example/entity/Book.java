@@ -17,15 +17,15 @@ import lombok.ToString;
 @Document(collection = "book4")
 public class Book {
 
-    @Id
+    @Id // 기본키
     private long code = 0L;
 
     private String title = null;
 
-    private long price = 0L;
-
     // 문자열 "hello"
     private String writer = null;
+
+    private long price = 0L;
 
     // 'A', 'B', 'C'
     private String category = null;

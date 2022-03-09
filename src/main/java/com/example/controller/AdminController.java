@@ -118,6 +118,7 @@ public class AdminController {
         return "redirect:/admin/insertbatch";
     }
 
+    // 목록
     // 127.0.0.1:8080/admin/selectlist?page=1&text=
     @GetMapping(value = "selectlist")
     public String selectlistGET(
