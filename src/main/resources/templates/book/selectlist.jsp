@@ -5,13 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>도서목록</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 
 <body>
     <div style="padding:70px;">
-        <h4>도서목록</h4>
+        <h3>도서목록</h3>
         <a th:href="@{/book/insert}" class="btn btn-primary" style="position:absolute;left:70%;top:100px;">도서등록</a>
 
         <form th:action="@{/book/selectlist}" method="get">
@@ -65,4 +68,9 @@
 
     </div>
 </body>
+<style>
+h4 {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+</style>
 </html>

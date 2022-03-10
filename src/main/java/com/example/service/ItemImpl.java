@@ -129,7 +129,6 @@ public class ItemImpl implements ItemDB {
             e.printStackTrace();
             return -1;
         }
-
     }
 
     // 수정

@@ -7,7 +7,7 @@
     <title>도서 등록</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 </head>
@@ -46,7 +46,7 @@
 
 h3 {
     float: left;
-    font-family:  'Do Hyeon', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
